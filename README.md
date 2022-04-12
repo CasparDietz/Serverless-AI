@@ -5,4 +5,4 @@ In this context, some works focus on application function placement on edge-clou
 
 This research project aims: 
 1) to benchmark and evaluate the performance of AI applications running in FaaS computing continuum environments, and 
-2) 2) to evaluate the effectiveness of component placement algorithms developed in previous research.
+2) to evaluate the effectiveness of component placement algorithms developed in previous research.
