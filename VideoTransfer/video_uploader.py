@@ -38,5 +38,3 @@ def create_server():
     url = "http://localhost:{}".format(server.server_port)
     # Return the URL
     return url
-
-
