@@ -1,31 +1,40 @@
-# import libraries
-from vidgear.gears import VideoGear
-from vidgear.gears import NetGear
+#importing libraries
+import socket
+import cv2
+import pickle
+import struct
+import imutils
 
-stream = VideoGear(source='sample-video.mp4').start() #Open any video stream
-server = NetGear() #Define netgear server with default settings
+# Server socket
+# create an INET, STREAMing socket
+server_socket = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
+host_name  = socket.gethostname()
+host_ip = socket.gethostbyname(host_name)
+print('HOST IP:',host_ip)
+port = 10051
+socket_address = (host_ip,port)
+print('Socket created')
+# bind the socket to the host. 
+#The values passed to bind() depend on the address family of the socket
+server_socket.bind(socket_address)
+print('Socket bind complete')
+#listen() enables a server to accept() connections
+#listen() has a backlog parameter. 
+#It specifies the number of unaccepted connections that the system will allow before refusing new connections.
+server_socket.listen(5)
+print('Socket now listening')
 
-# infinite loop until [Ctrl+C] is pressed
 while True:
-    try: 
-        frame = stream.read()
-        # read frames
-
-        # check if frame is None
-        if frame is None:
-            #if True break the infinite loop
-            break
-
-        # do something with frame here
-
-        # send frame to server
-        server.send(frame)
-
-    except KeyboardInterrupt:
-        #break the infinite loop
-        break
-
-# safely close video stream
-stream.stop()
-# safely close server
-server.close()
+    client_socket,addr = server_socket.accept()
+    print('Connection from:',addr)
+    if client_socket:
+        vid = cv2.VideoCapture('sample-video.mp4')
+        while(vid.isOpened()):
+            img,frame = vid.read()
+            a = pickle.dumps(frame)
+            message = struct.pack("Q",len(a))+a
+            client_socket.sendall(message)
+            cv2.imshow('Sending...',frame)
+            key = cv2.waitKey(10) 
+            if key ==13:
+                client_socket.close()

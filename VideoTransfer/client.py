@@ -1,37 +1,39 @@
-from vidgear.gears import NetGear
+#importing libraries
+import socket
 import cv2
+import pickle
+import struct
+import imutils
 
-#define netgear client with `receive_mode = True` and default settings
-client = NetGear(receive_mode = True)
+# Client socket
+# create an INET, STREAMing socket : 
+client_socket = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
+host_ip = '<localhost>'# Standard loopback interface address (localhost)
+host = socket.gethostbyname(socket.gethostname())
+port = 10050 # Port to listen on (non-privileged ports are > 1023)
+# now connect to the web server on the specified port number
+client_socket.connect((host_ip,port)) 
+#'b' or 'B'produces an instance of the bytes type instead of the str type
+#used in handling binary data from network connections
+data = b""
+# Q: unsigned long long integer(8 bytes)
+payload_size = struct.calcsize("Q")
 
-#define codec and create VideoWriter object
-fourcc = cv2.VideoWriter_fourcc(*'mp4v')
-out = cv2.VideoWriter('output.mp4', fourcc, 20.0, (640,  480))
-
-# infinite loop
 while True:
-    # receive frames from network
-    frame = client.recv()
-
-    # check if frame is None
-    if frame is None:
-        #if True break the infinite loop
+    while len(data) < payload_size:
+        packet = client_socket.recv(4*1024)
+        if not packet: break
+        data+=packet
+    packed_msg_size = data[:payload_size]
+    data = data[payload_size:]
+    msg_size = struct.unpack("Q",packed_msg_size)[0]
+    while len(data) < msg_size:
+        data += client_socket.recv(4*1024)
+    frame_data = data[:msg_size]
+    data  = data[msg_size:]
+    frame = pickle.loads(frame_data)
+    cv2.imshow("Receiving...",frame)
+    key = cv2.waitKey(10) 
+    if key  == 13:
         break
-
-    # do something with frame here
-    out.write(frame)
-    # Show output window
-    cv2.imshow("Output Frame", frame)
-
-    key = cv2.waitKey(1) & 0xFF
-    # check for 'q' key-press
-    if key == ord("q"):
-        #if 'q' key-pressed break out
-        break
-
-# close output window
-cv2.destroyAllWindows()
-# safely close client
-client.close()
-
-out.release()
+client_socket.close()
