@@ -1,39 +1,24 @@
-#importing libraries
-import socket
-import cv2
-import pickle
-import struct
-import imutils
+import socket                   # Import socket module
 
-# Client socket
-# create an INET, STREAMing socket : 
-client_socket = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
-host_ip = '<localhost>'# Standard loopback interface address (localhost)
-host = socket.gethostbyname(socket.gethostname())
-port = 10050 # Port to listen on (non-privileged ports are > 1023)
-# now connect to the web server on the specified port number
-client_socket.connect((host_ip,port)) 
-#'b' or 'B'produces an instance of the bytes type instead of the str type
-#used in handling binary data from network connections
-data = b""
-# Q: unsigned long long integer(8 bytes)
-payload_size = struct.calcsize("Q")
+s = socket.socket()             # Create a socket object
+host = socket.gethostname()     # Get local machine name
+port = 60000                    # Reserve a port for your service.
 
-while True:
-    while len(data) < payload_size:
-        packet = client_socket.recv(4*1024)
-        if not packet: break
-        data+=packet
-    packed_msg_size = data[:payload_size]
-    data = data[payload_size:]
-    msg_size = struct.unpack("Q",packed_msg_size)[0]
-    while len(data) < msg_size:
-        data += client_socket.recv(4*1024)
-    frame_data = data[:msg_size]
-    data  = data[msg_size:]
-    frame = pickle.loads(frame_data)
-    cv2.imshow("Receiving...",frame)
-    key = cv2.waitKey(10) 
-    if key  == 13:
-        break
-client_socket.close()
+s.connect((host, port))
+s.send("Hello server!")
+
+with open('received_file', 'wb') as f:
+    print('file opened')
+    while True:
+        print('receiving data...')
+        data = s.recv(1024)
+        print('data=%s', (data))
+        if not data:
+            break
+        # write data to a file
+        f.write(data)
+
+f.close()
+print('Successfully get the file')
+s.close()
+print('connection closed')
