@@ -47,12 +47,12 @@ while True:
     frame = pickle.loads(frame_data)
 
     # Display
-    cv2.imshow('frame', frame)
+    #cv2.imshow('frame', frame)
     print('Frame ' + str(i))
-    cv2.waitKey(1)
+    #cv2.waitKey(1)
     
     # Save frames in the frames folder
-    cv2.imwrite('frames/frame{}.jpg'.format(i), frame)
+    cv2.imwrite('../frames/frame{}.jpg'.format(i), frame)
     i += 1
  
 conn.close()

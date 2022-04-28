@@ -1,11 +1,11 @@
 import cv2
 import numpy as np
 import socket
-import sys
+#import sys
 import pickle
 import struct
 
-cap=cv2.VideoCapture('videos/sample2.mp4')
+cap=cv2.VideoCapture('../videos/sample2.mp4')
 #cap=cv2.VideoCapture('videos/sample-video.mp4')
 clientsocket=socket.socket(socket.AF_INET,socket.SOCK_STREAM)
 clientsocket.connect(('localhost',8089))
