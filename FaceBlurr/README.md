@@ -41,8 +41,6 @@ A tool to blur faces or other regions in photos and videos 🕵️‍
    python manual_blur_image.py --help
    ```
 
-6. TADAA 🎉 It's done 🤗
-
 ## 🤗 Examples
 
 #### For `auto_blur_image.py`:
@@ -67,6 +65,3 @@ I am using face detection model in [face_model](./face_model) folder that can de
 
 ## 🦸‍♀️ Project's Core Codes
 - [📍 TensorFlow Object Detection:](https://github.com/asmaamirkhan/TFObjectDetection) check out this repo in case that you want to use the core code for other purpose 
-
-## 💼 Contact
-Find me on [LinkedIn](https://www.linkedin.com/in/asmaamirkhan/) and feel free to mail me, [Asmaa 🦋](mailto:asmaamirkhan.am@gmail.com)
