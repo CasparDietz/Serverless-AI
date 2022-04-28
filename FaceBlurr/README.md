@@ -2,7 +2,7 @@
 A tool to blur faces or other regions in photos and videos 🕵️‍
 
 ## 🙌 Available Codes
-1. [auto_blur_image](./src/auto_blur_image.py): Detects and blurs faces _(or objects)_ in a given image automatically due to a Tensorflow model
+1. [auto_blur_image](./FaceBlurr/src/auto_blur_image.py): Detects and blurs faces _(or objects)_ in a given image automatically due to a Tensorflow model
 2. [auto_blur_video](./src/auto_blur_video.py): Detects and blurs faces _(or objects)_ in a given video due to a Tensorflow model
 3. [manual_blur_image](./src/manual_blur_image.py): Blurs manually selected faces _(or objects)_
 
