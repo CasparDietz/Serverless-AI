@@ -1,15 +1,9 @@
-# https://learnopencv.com/reading-and-writing-videos-using-opencv/#read-video-from-file
-# https://github.com/abhikesare9/live-streaming-with-opencv/blob/main/client.py
-# https://medium.com/nerd-for-tech/live-streaming-using-opencv-c0ef28a5e497
-
-"""
-This python script is used to recieve video from the sender.
-It cuts the video into frames and saves them in a folder.
-"""
+import os
 import pickle
 import socket
 import struct
 import cv2
+import auto_blur_image
 
 HOST = ''
 PORT = 8089
@@ -27,6 +21,8 @@ print('Connected with ' + addr[0] + ':' + str(addr[1]))
 
 data = b'' # a bytes object
 payload_size = struct.calcsize("L") # payload size is 4 bytes 
+
+print("Waiting for frames...")
 
 i = 0
 while True:
@@ -62,3 +58,10 @@ while True:
 conn.close()
 print('Recieved ' + str(i) + ' frames')
 print('Connection closed') 
+
+###############################################################
+print('Now invoking the face_blurr.py script')
+print('Not actually but theoretically!!')
+for i in range(0,i):
+    print('Frame ' + str(i))
+    

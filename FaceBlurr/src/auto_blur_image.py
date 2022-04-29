@@ -1,5 +1,3 @@
-# author: Asmaa Mirkhan ~ 2019
-
 import os
 import argparse
 import cv2
