@@ -3,7 +3,7 @@ To run the two, first run reciever.py in one terminal window and the run sender.
 
 Frames are saved on the reciever side in the folder frames.
 
-# Dockerizing the reciever
+# 🐳 Dockerizing the reciever
 Build the container image:
 ```bash
    docker build -t babakuranavideo . 
