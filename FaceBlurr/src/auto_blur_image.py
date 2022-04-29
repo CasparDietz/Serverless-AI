@@ -46,9 +46,11 @@ def main(args):
 
     # real face detection
     faces = detector.detect_objects(image, threshold=threshold)
+    print("Faces detected")
 
     # apply blurring
     image = blurBoxes(image, faces)
+    print("Faces blurred")
 
     # show image
     #cv2.imshow('blurred', image)

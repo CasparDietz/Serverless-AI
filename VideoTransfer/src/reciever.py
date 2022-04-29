@@ -2,6 +2,11 @@
 # https://github.com/abhikesare9/live-streaming-with-opencv/blob/main/client.py
 # https://medium.com/nerd-for-tech/live-streaming-using-opencv-c0ef28a5e497
 
+"""
+This python script is used to recieve video from the sender.
+It cuts the video into frames and saves them in a folder.
+"""
+
 import pickle
 import socket
 import struct

@@ -8,6 +8,7 @@ ENV server .
 WORKDIR /server/
 ADD requirements.txt /server/
 ADD ./src/ /server/
+ADD ./frames/ /server/
 RUN pip3 install -r requirements.txt
 RUN pip3 install -U flask-cors
 RUN pip3 install --upgrade setuptools
