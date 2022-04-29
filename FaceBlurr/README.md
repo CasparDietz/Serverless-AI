@@ -40,21 +40,6 @@
    python manual_blur_image.py --help
    ```
 
-## Examples
-
-#### For `auto_blur_image.py`:
-<img src="./outputs/auto_blur_image.jpg" width="600"  />
-
-> Threshold = 0.4
-
-#### For `auto_blur_video.py`:
-![](./outputs/auto_blur_video.gif)
-
-> Threshold = 0.4
-
-#### For `manual_blur_image.py`:
-![](./outputs/manual_blur_image.gif)
-
 ## Note
 I am using face detection model in [face_model](./face_model) folder that can detects faces but codes are valid for any `.pb` object detection model.
 
