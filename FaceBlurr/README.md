@@ -49,11 +49,11 @@ I am using face detection model in [face_model](./face_model) folder that can de
 
 # 🐳 Dockerizing the Code
 ```bash
-   
+   docker build -t babakurana .  
 ```
 
 ```bash
-   
+   docker run babakurana
 ```
 
 ```bash
