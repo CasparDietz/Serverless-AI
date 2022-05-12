@@ -37,7 +37,7 @@ def video_to_frames(video, path_output_dir):
     vidcap.release()
     return count
 
-count = video_to_frames('./VideoInput/test.mp4', './Frames')
+count = video_to_frames('./VideoInput/test.mp4', './Frames') # count is the number of frames
 
 """
 Send the frames to the server
