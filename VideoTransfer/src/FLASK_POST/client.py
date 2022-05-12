@@ -9,6 +9,7 @@ Import an image as a Pillow Image
 ⇒ You can safely POST with json
 """
 
+from flask import request
 import requests
 from PIL import Image
 import json
@@ -63,3 +64,13 @@ for frame in range(count):
     r = requests.post("http://127.0.0.1:5000", json=json.dumps(files)) #POST to server as json
 
     print(r.json())
+
+
+
+"""
+Get the frames from the server.
+The client sends the GET request to the server and the server returns the frame.
+The client receives the frame and saves it as a .png file.
+"""
+#r = requests.get("http://127.0.0.1:5000/recieve?frame_id=0") #POST to server as json
+#print(r.json())

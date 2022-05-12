@@ -30,7 +30,7 @@ def index():
     img = base64.b64decode(img) #Convert image data converted to base64 to original binary data# bytes
     img = BytesIO(img) # _io.Converted to be handled by BytesIO pillow
     img = Image.open(img) 
-    img.show()
+    #img.show()
     
     # Count the number of files in the folder 
     count = len(os.listdir('src/FLASK_POST/RecievedFrames'))
@@ -49,6 +49,30 @@ def index():
         }
 
     return jsonify(response)
+
+"""
+app.rout that allows the client to make GET requests to the server and receive the .png files from the RecievedFrames folder
+"""
+@app.route("/recieve", methods=["GET", "POST"])
+def recieve():
+    img = Image.open('src/FLASK_POST/RecievedFrames/' + str(0) + '.png')
+    #Convert Pillow Image to bytes and then to base64
+    buffered = BytesIO()
+    img.save(buffered, format="PNG")
+    img_byte = buffered.getvalue() # bytes
+    img_base64 = base64.b64encode(img_byte) #Base64-encoded bytes * not str
+
+    #It's still bytes so json.Convert to str to dumps(Because the json element does not support bytes type)
+    img_str = img_base64.decode('utf-8') # str
+
+    files = {
+        "text":"hogehoge",
+        "img":img_str
+        }
+    
+    return json.dumps(files)
+    
+
 
 if __name__ == "__main__":
     app.debug = True
