@@ -61,8 +61,10 @@ for frame in range(count):
         "img":img_str
         }
 
-    r = requests.post("http://127.0.0.1:5000", json=json.dumps(files)) #POST to server as json
-
+    #LOCALLY
+    #r = requests.post("http://127.0.0.1:5000", json=json.dumps(files)) #POST to server as json
+    #OPENFAAS
+    r = requests.post("http://127.0.0.1:8080/function/flask-service", json=json.dumps(files)) #POST to server as json
     print(r.json())
 
 
