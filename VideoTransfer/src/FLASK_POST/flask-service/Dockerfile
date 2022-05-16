@@ -50,6 +50,8 @@ WORKDIR /home/app/
 COPY server.py/        .
 #COPY requirements.txt   .
 COPY requirements.txt    .
+RUN mkdir -p /home/app/RecievedFrames
+RUN mkdir -p /home/app/Frames
 
 USER root
 RUN pip install -r requirements.txt

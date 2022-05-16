@@ -16,12 +16,12 @@ from waitress import serve
 
 app = Flask(__name__)
 
-@app.before_request
+""" @app.before_request
 def before_request():
-    return "[SERVER]"
+    return "[SERVER]" """
 
 @app.route("/", methods=["GET", "POST"])
-def index():    
+def main():    
     json_data = request.get_json() #Get the POSTed json
     dict_data = json.loads(json_data) #Convert json to dictionary
 
@@ -48,28 +48,27 @@ def index():
         }
     return jsonify(response)
 
-
 """
 app.rout that allows the client to make GET requests to the server and receive the .png files from the RecievedFrames folder
 """
-# @app.route("/recieve", methods=["GET", "POST"])
-# def recieve():
-#     img = Image.open('src/FLASK_POST/RecievedFrames/' + str(0) + '.png')
-#     #Convert Pillow Image to bytes and then to base64
-#     buffered = BytesIO()
-#     img.save(buffered, format="PNG")
-#     img_byte = buffered.getvalue() # bytes
-#     img_base64 = base64.b64encode(img_byte) #Base64-encoded bytes * not str
+@app.route("/recieve", methods=["GET", "POST"])
+def recieve():
+    img = Image.open('RecievedFrames/' + str(0) + '.png')
+    #Convert Pillow Image to bytes and then to base64
+    buffered = BytesIO()
+    img.save(buffered, format="PNG")
+    img_byte = buffered.getvalue() # bytes
+    img_base64 = base64.b64encode(img_byte) #Base64-encoded bytes * not str
 
-#     #It's still bytes so json.Convert to str to dumps(Because the json element does not support bytes type)
-#     img_str = img_base64.decode('utf-8') # str
+    #It's still bytes so json.Convert to str to dumps(Because the json element does not support bytes type)
+    img_str = img_base64.decode('utf-8') # str
 
-#     files = {
-#         "text":"hogehoge",
-#         "img":img_str
-#         }
+    files = {
+        "text":"This goes back to the client",
+        "img":img_str
+        }
     
-#     return json.dumps(files)
+    return json.dumps(files)
 
 
 

@@ -65,21 +65,29 @@ for frame in range(count):
         }
 
     #LOCALLY
-    r = requests.post("http://127.0.0.1:5000", json=json.dumps(files)) #POST to server as json
+    #r = requests.post("http://127.0.0.1:5000", json=json.dumps(files)) #POST to server as json
     
     #OPENFAAS
-    #r = requests.post("http://127.0.0.1:8080/function/flask-service/", json=json.dumps(files)) #POST to server as json
+    r = requests.post("http://127.0.0.1:8080/function/flask-service", json=json.dumps(files)) #POST to server as json
     
     print("[CLIENT] Posted frame " + str(frame) + " to the server")
     print(r.json())
+    #print(r.text)
+    
 
-print("[CLIENT] All frames were posted to the server")
-
+print("[CLIENT] >>>>>>>>>>>>> All frames were posted to the server <<<<<<<<<<<<<<<<")
 
 """
 Get the frames from the server.
 The client sends the GET request to the server and the server returns the frame.
 The client receives the frame and saves it as a .png file.
 """
-#r = requests.get("http://127.0.0.1:5000/recieve?frame_id=0") #POST to server as json
-#print(r.json())
+request = requests.get("http://127.0.0.1:8080/function/flask-service/recieve") #POST to server as json
+#print(request.text)
+dict_data = request.json() #Convert json to dictionary
+img = dict_data["img"] #Take out base64# str
+img = base64.b64decode(img) #Convert image data converted to base64 to original binary data# bytes
+img = BytesIO(img) # _io.Converted to be handled by BytesIO pillow
+img = Image.open(img) 
+print("[CLIENT] Received frame from the server")
+img.show()
