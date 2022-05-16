@@ -1,5 +1,5 @@
 ```bash
-kubectl port-forward -n openfaas svc/gateway 8080:8080
+   kubectl port-forward -n openfaas svc/gateway 8080:8080
 ```
 ```bash
    faas-cli up -f flask-service.yml -g http://127.0.0.1:8080  
