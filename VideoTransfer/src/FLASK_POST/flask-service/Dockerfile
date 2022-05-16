@@ -26,6 +26,7 @@
 
 # CMD ["fwatchdog"]
 
+###############################################################################
 FROM --platform=${TARGETPLATFORM:-linux/amd64} openfaas/of-watchdog:0.7.7 as watchdog
 FROM --platform=${TARGETPLATFORM:-linux/amd64} python:3.7-slim-buster
 
@@ -36,16 +37,17 @@ RUN chmod +x /usr/bin/fwatchdog
 RUN apt-get -qy update && apt-get -qy install gcc make
 
 # Add non root user
-RUN addgroup --system app && adduser app --system --ingroup app
+RUN addgroup --system app && adduser app --system --ingroup app 
 RUN chown app /home/app 
 
-USER app
+USER app 
 ENV PATH=$PATH:/home/app/.local/bin 
 
 WORKDIR /home/app/
 
 #COPY server.py          .
-COPY ../server.py    .
+#COPY ../server.py    .
+COPY server.py/        .
 #COPY requirements.txt   .
 COPY requirements.txt    .
 
@@ -57,10 +59,15 @@ WORKDIR /home/app/
 RUN chown -R app:app *
 USER app
 
-ENV fprocess="python server.py"
+ENV fprocess="python3 server.py"
 
+# Now set the watchdog as the start-up process
+# Along with the HTTP mode, and an upstream URL to 
+# where your HTTP server will be running from the original
+# image.
 ENV upstream_url="http://127.0.0.1:5000" 
 ENV mode="http"
 ENV cgi_headers="true"
 
 CMD ["fwatchdog"]
+

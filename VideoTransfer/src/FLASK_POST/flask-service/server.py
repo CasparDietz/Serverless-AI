@@ -16,6 +16,10 @@ from waitress import serve
 
 app = Flask(__name__)
 
+@app.before_request
+def before_request():
+    return "[SERVER]"
+
 @app.route("/", methods=["GET", "POST"])
 def index():    
     json_data = request.get_json() #Get the POSTed json
@@ -42,8 +46,8 @@ def index():
         "text":text,
         "img_shape":img_shape        
         }
-
     return jsonify(response)
+
 
 """
 app.rout that allows the client to make GET requests to the server and receive the .png files from the RecievedFrames folder
@@ -74,4 +78,5 @@ if __name__ == "__main__":
     #LOCALLY
     #app.run()
     #OPENFAAS
-    serve(app, host='0.0.0.0', port=8080)
+    #serve(app, host='0.0.0.0', port=8080)
+    app.run(host='0.0.0.0', port = 5000)

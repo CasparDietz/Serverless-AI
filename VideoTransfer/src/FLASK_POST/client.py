@@ -23,6 +23,7 @@ import os
 Video is taken as input and the frames are extracted
 """
 def video_to_frames(video, path_output_dir):
+    print("[CLIENT] Began cutting the video into frames")
     # extract frames from a video and save to directory as 'x.png' where 
     # x is the frame index
     vidcap = cv2.VideoCapture(video)
@@ -36,10 +37,12 @@ def video_to_frames(video, path_output_dir):
             break
     cv2.destroyAllWindows()
     vidcap.release()
+    print("[CLIENT] Finished cutting the video into frames")
     return count
 
 count = video_to_frames('./VideoInput/test.mp4', './Frames') # count is the number of frames
-
+print("[CLIENT] Read " + str(count) + " frames")      
+      
 """
 Send the frames to the server
 """ 
@@ -62,11 +65,15 @@ for frame in range(count):
         }
 
     #LOCALLY
-    #r = requests.post("http://127.0.0.1:5000", json=json.dumps(files)) #POST to server as json
+    r = requests.post("http://127.0.0.1:5000", json=json.dumps(files)) #POST to server as json
+    
     #OPENFAAS
-    r = requests.post("http://127.0.0.1:8080/function/flask-service", json=json.dumps(files)) #POST to server as json
+    #r = requests.post("http://127.0.0.1:8080/function/flask-service/", json=json.dumps(files)) #POST to server as json
+    
+    print("[CLIENT] Posted frame " + str(frame) + " to the server")
     print(r.json())
 
+print("[CLIENT] All frames were posted to the server")
 
 
 """
