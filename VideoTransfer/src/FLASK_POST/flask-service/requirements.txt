@@ -1,8 +1,9 @@
 Flask==2.1.2
 requests==2.26.0
-
 image==1.5.33
-
 json5==0.9.6
-
-waitress
+#waitress
+numpy==1.16.3
+tensorflow==2.3.1
+opencv-python-headless
+Image

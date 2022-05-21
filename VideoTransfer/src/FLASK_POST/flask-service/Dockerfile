@@ -30,6 +30,7 @@
 FROM --platform=${TARGETPLATFORM:-linux/amd64} openfaas/of-watchdog:0.7.7 as watchdog
 FROM --platform=${TARGETPLATFORM:-linux/amd64} python:3.7-slim-buster
 
+
 COPY --from=watchdog /fwatchdog /usr/bin/fwatchdog 
 RUN chmod +x /usr/bin/fwatchdog 
 
@@ -48,10 +49,13 @@ WORKDIR /home/app/
 #COPY server.py          .
 #COPY ../server.py    .
 COPY server.py/        .
+COPY face.pb/          .
+COPY DetectorAPI.py/   .
+COPY auto_blur_image.py/   .
 #COPY requirements.txt   .
 COPY requirements.txt    .
-RUN mkdir -p /home/app/RecievedFrames
-RUN mkdir -p /home/app/Frames
+#RUN mkdir -p /home/app/RecievedFrames
+#RUN mkdir -p /home/app/Frames
 
 USER root
 RUN pip install -r requirements.txt
