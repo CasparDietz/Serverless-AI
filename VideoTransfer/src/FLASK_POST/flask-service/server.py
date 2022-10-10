@@ -36,14 +36,8 @@ def main():
     img = base64.b64decode(img) #Convert image data converted to base64 to original binary data# bytes
     img = BytesIO(img) # _io.Converted to be handled by BytesIO pillow
     img = Image.open(img) 
-    
-    # Count the number of files in the folder 
-    #count = len(os.listdir('src/FLASK_POST/RecievedFrames'))
-    #count = len(os.listdir('RecievedFrames'))
-    
-    # Save the image to the folder with the name of the number of files as the name
     img.save('unblurred.png')   
-    
+    print("[SERVER] Stored frame")
     """
     Blur the image
     """
@@ -59,7 +53,6 @@ def main():
     print("Faces blurred")
     # Save the image
     cv2.imwrite('./blurred.png', image)
-
     """
     Prepare the image to be sent back to the client
     """
@@ -74,39 +67,24 @@ def main():
     img_str = img_base64.decode('utf-8') # str
 
     response = {
-        "text":"hogehoge",
+        "text":"serveRR",
         "img":img_str
         }
     return jsonify(response)
 
-"""
-app.rout that allows the client to make GET requests to the server and receive the .png files from the RecievedFrames folder
-"""
-@app.route("/recieve", methods=["GET", "POST"])
-def recieve():
-    img = Image.open('RecievedFrames/' + str(0) + '.png')
-    #Convert Pillow Image to bytes and then to base64
-    buffered = BytesIO()
-    img.save(buffered, format="PNG")
-    img_byte = buffered.getvalue() # bytes
-    img_base64 = base64.b64encode(img_byte) #Base64-encoded bytes * not str
 
-    #It's still bytes so json.Convert to str to dumps(Because the json element does not support bytes type)
-    img_str = img_base64.decode('utf-8') # str
-
-    files = {
-        "text":"This goes back to the client",
-        "img":img_str
-        }
-    
-    return json.dumps(files)
+@app.route("/test", methods=["GET", "POST"])
+def test():
+   return "App Works!!!"
 
 
 
 if __name__ == "__main__":
     app.debug = True
+    
     #LOCALLY
     #app.run()
+    
     #OPENFAAS
     #serve(app, host='0.0.0.0', port=8080)
     app.run(host='0.0.0.0', port = 5000)

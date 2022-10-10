@@ -21,7 +21,12 @@ COPY requirements.txt   .
 
 
 USER root
+
+RUN pip install --upgrade pip
+
 RUN pip install -r requirements.txt
+
+#RUN pip install tensorflow==2.3.1 -f https://tf.kmtea.eu/whl/stable.html
 
 WORKDIR /home/app/
 

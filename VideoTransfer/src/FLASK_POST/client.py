@@ -9,6 +9,7 @@ Import an image as a Pillow Image
 ⇒ You can safely POST with json
 """
 
+from fileinput import filename
 from flask import request
 import requests
 from PIL import Image
@@ -17,7 +18,7 @@ import base64
 from io import BytesIO
 import cv2
 import os
-
+import time
 
 """
 Video is taken as input and the frames are extracted
@@ -31,6 +32,8 @@ def video_to_frames(video, path_output_dir):
     while vidcap.isOpened():
         success, image = vidcap.read()
         if success:
+            #img_rotate_180 = cv2.rotate(image, cv2.ROTATE_180)
+            #cv2.imwrite(os.path.join(path_output_dir, '%d.png') % count, img_rotate_180)
             cv2.imwrite(os.path.join(path_output_dir, '%d.png') % count, image)
             count += 1
         else:
@@ -60,7 +63,7 @@ for frame in range(count):
     img_str = img_base64.decode('utf-8') # str
 
     files = {
-        "text":"hogehoge",
+        "text":"client",
         "img":img_str
         }
 
@@ -68,29 +71,20 @@ for frame in range(count):
     #r = requests.post("http://127.0.0.1:5000", json=json.dumps(files)) #POST to server as json
     
     #OPENFAAS
-    r = requests.post("http://127.0.0.1:8080/function/flask-service", json=json.dumps(files)) #POST to server as json
+    #r = requests.post("http://127.0.0.1:8080/function/flask-service", json=json.dumps(files)) #POST to server as json
+    # 131.175.56.197
+    r = requests.post("http://131.175.56.197:8080/function/flask-service", json=json.dumps(files))
     dict_data = r.json() #Convert json to dictionary
     img = dict_data["img"] #Take out base64# str
     img = base64.b64decode(img) #Convert image data converted to base64 to original binary data# bytes
     img = BytesIO(img) # _io.Converted to be handled by BytesIO pillow
     img = Image.open(img) 
-    img.show() #Show the image
+    #img.show() #Show the image
+    filename = "./BlurredFrames/" + str(frame) + ".png"
+    img.save(filename) #Save the image)   
     print("[CLIENT] Received frame from the server")
-    break
+    #break
 
-print("[CLIENT] >>>>>>>>>>>>> All frames were posted to the server <<<<<<<<<<<<<<<<")
-
-"""
-Get the frames from the server.
-The client sends the GET request to the server and the server returns the frame.
-The client receives the frame and saves it as a .png file.
-"""
-""" request = requests.get("http://127.0.0.1:8080/function/flask-service/recieve") #POST to server as json
-#print(request.text)
-dict_data = request.json() #Convert json to dictionary
-img = dict_data["img"] #Take out base64# str
-img = base64.b64decode(img) #Convert image data converted to base64 to original binary data# bytes
-img = BytesIO(img) # _io.Converted to be handled by BytesIO pillow
-img = Image.open(img) 
-print("[CLIENT] Received frame from the server")
-img.show() """
+print("[CLIENT] All frames were posted to the server")
+ts = time.time()
+print("[CLIENT] Finished at " + str(ts))

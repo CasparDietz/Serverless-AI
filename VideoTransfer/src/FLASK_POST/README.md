@@ -4,7 +4,7 @@
 ```bash
 kubectl port-forward -n openfaas svc/gateway 8080:8080
 ```
-## Step 2: Build and pusg the Function
+## Step 2: Build and push the Function
 ```bash
 faas-cli up -f flask-service.yml -g http://127.0.0.1:8080
 ```

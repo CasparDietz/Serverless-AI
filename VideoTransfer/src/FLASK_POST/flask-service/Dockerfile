@@ -35,7 +35,7 @@ COPY --from=watchdog /fwatchdog /usr/bin/fwatchdog
 RUN chmod +x /usr/bin/fwatchdog 
 
 # Uncomment if you want to use native modules
-RUN apt-get -qy update && apt-get -qy install gcc make
+#RUN apt-get -qy update && apt-get -qy install gcc make
 
 # Add non root user
 RUN addgroup --system app && adduser app --system --ingroup app 
@@ -58,7 +58,12 @@ COPY requirements.txt    .
 #RUN mkdir -p /home/app/Frames
 
 USER root
+
+#RUN pip install --upgrade pip
+
+
 RUN pip install -r requirements.txt
+#RUN pip install tensorflow==2.3.1 -f https://tf.kmtea.eu/whl/stable.html
 
 WORKDIR /home/app/
 
