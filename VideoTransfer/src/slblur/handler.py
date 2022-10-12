@@ -1,5 +1,4 @@
-import cv2
-from flask import Flask, jsonify, request
+#from flask import  jsonify, request
 from PIL import Image
 import json
 import base64
@@ -10,8 +9,6 @@ import cv2
 import numpy as np
 import tensorflow as tf
 import time
-#from auto_blur_image import blurBoxes
-#from DetectorAPI import Detector
 
 def handle(req):
     json_data = request.get_json() #Get the POSTed json

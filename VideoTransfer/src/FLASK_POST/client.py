@@ -71,9 +71,8 @@ for frame in range(count):
     #r = requests.post("http://127.0.0.1:5000", json=json.dumps(files)) #POST to server as json
     
     #OPENFAAS
-    #r = requests.post("http://127.0.0.1:8080/function/flask-service", json=json.dumps(files)) #POST to server as json
-    # 131.175.56.197
-    r = requests.post("http://131.175.56.197:8080/function/flask-service", json=json.dumps(files))
+    r = requests.post("http://127.0.0.1:8080/function/flask-service", json=json.dumps(files)) #POST to server as json
+   # r = requests.post("http://10.75.4.82:53/function/flask-service", json=json.dumps(files))
     dict_data = r.json() #Convert json to dictionary
     img = dict_data["img"] #Take out base64# str
     img = base64.b64decode(img) #Convert image data converted to base64 to original binary data# bytes
