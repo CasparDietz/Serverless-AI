@@ -1,8 +1,0 @@
-Flask==2.1.2
-#requests==2.26.0
-image==1.5.33
-json5==0.9.6
-#waitress
-numpy
-tensorflow
-opencv-python-headless
