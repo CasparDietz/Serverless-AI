@@ -2,6 +2,7 @@
 from PIL import Image
 import json
 import base64
+from flask import Flask, jsonify, request
 from io import BytesIO
 import os
 import argparse
@@ -11,10 +12,15 @@ import tensorflow as tf
 import time
 
 def handle(req):
-    json_data = request.get_json() #Get the POSTed json
-    dict_data = json.loads(json_data) #Convert json to dictionary
+    # Retreive from the string the json object
+    
+    #json_data = request.get_json() #Get the POSTed json
+    #dict_data = json.loads(json_data) #Convert json to dictionary
 
-    img = dict_data["img"] #Take out base64# str
+    #img = dict_data["img"] #Take out base64# str
+    
+    img = json.loads(req)
+    
     img = base64.b64decode(img) #Convert image data converted to base64 to original binary data# bytes
     img = BytesIO(img) # _io.Converted to be handled by BytesIO pillow
     img = Image.open(img) 

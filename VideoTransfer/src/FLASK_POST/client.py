@@ -62,17 +62,18 @@ for frame in range(count):
     #It's still bytes so json.Convert to str to dumps(Because the json element does not support bytes type)
     img_str = img_base64.decode('utf-8') # str
 
-    files = {
-        "text":"client",
-        "img":img_str
-        }
+    #files = {
+    #    "text":"client",
+    #    "img":img_str
+    #    }
 
     #LOCALLY
     #r = requests.post("http://127.0.0.1:5000", json=json.dumps(files)) #POST to server as json
     
     #OPENFAAS
-    r = requests.post("http://127.0.0.1:8080/function/flask-service", json=json.dumps(files)) #POST to server as json
-   # r = requests.post("http://10.75.4.82:53/function/flask-service", json=json.dumps(files))
+    #r = requests.post("http://127.0.0.1:8080/function/flask-service", json=json.dumps(files)) #POST to server as json
+    r = requests.post("http://127.0.0.1:8080/function/slblur", json=json.dumps(img_str))
+    
     dict_data = r.json() #Convert json to dictionary
     img = dict_data["img"] #Take out base64# str
     img = base64.b64decode(img) #Convert image data converted to base64 to original binary data# bytes
