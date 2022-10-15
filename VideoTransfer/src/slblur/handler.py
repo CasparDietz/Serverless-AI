@@ -1,4 +1,5 @@
 #from flask import  jsonify, request
+import io
 from PIL import Image
 import json
 import base64
@@ -12,17 +13,16 @@ import tensorflow as tf
 import time
 
 def handle(req):
-    # Retreive from the string the json object
-    
+    print("New Handler 6")
     #json_data = request.get_json() #Get the POSTed json
+    #json_data = req.json()
     #dict_data = json.loads(json_data) #Convert json to dictionary
 
     #img = dict_data["img"] #Take out base64# str
-    
-    img = json.loads(req)
-    
+    img = req
     img = base64.b64decode(img) #Convert image data converted to base64 to original binary data# bytes
-    img = BytesIO(img) # _io.Converted to be handled by BytesIO pillow
+    #img = BytesIO(img) # _io.Converted to be handled by BytesIO pillow
+    img = io.BytesIO(img)
     img = Image.open(img) 
     img.save('unblurred.png')   
     print("[SERVER] Stored frame")
@@ -58,7 +58,8 @@ def handle(req):
         "text":"serveRR",
         "img":img_str
         }
-    return jsonify(response)
+    #return jsonify(response)
+    return img_str
 
 class Detector:
     def __init__(self, model_path, name=""):
