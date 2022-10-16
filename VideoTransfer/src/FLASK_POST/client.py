@@ -10,6 +10,7 @@ Import an image as a Pillow Image
 """
 
 from fileinput import filename
+import re
 from flask import request
 import requests
 from PIL import Image
@@ -75,14 +76,16 @@ for frame in range(count):
     #r = requests.post("http://127.0.0.1:8080/function/slblur", json=json.dumps(files)) #POST to server as json
     r = requests.post("http://127.0.0.1:8080/function/slblur", data = img_str) 
     
-    print(r)
-    #dict_data = r.json() #Convert json to dictionary
-    #img = dict_data["img"] #Take out base64# str
-    img = r
-    img = base64.b64decode(img) #Convert image data converted to base64 to original binary data# bytes
-    img = BytesIO(img) # _io.Converted to be handled by BytesIO pillow
+    # Extract the image string after "'img': " and before "}" => This has tobe done because the watchdog returns every warning and print
+    for line in r.text.splitlines():
+        if "img" in line:
+            img_str = re.search("'img': '(.*)'}", line).group(1)
+            break
+    
+    img = base64.b64decode(img_str) 
+    img = BytesIO(img) 
     img = Image.open(img) 
-    #img.show() #Show the image
+    img.show() #Show the image
     filename = "./BlurredFrames/" + str(frame) + ".png"
     img.save(filename) #Save the image)   
     print("[CLIENT] Received frame from the server")
