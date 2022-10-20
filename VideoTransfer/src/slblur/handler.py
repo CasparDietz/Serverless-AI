@@ -13,40 +13,35 @@ import tensorflow as tf
 import time
 
 def handle(req):
-    #print("NEW###########################################")
-    #dict_data = req.json()
-    #img = dict_data["data"] #Take out base64
-    
-    #base64.decodebytes(bytes(req, 'utf-8')) #This worked locally
-    
-    img = base64.b64decode(req) #New try
+    print("NEW###ANOTHER########################################CASPR")
+    total_start_time = time.time()
+    img = base64.b64decode(req) 
     img = BytesIO(img) # _io.Converted to be handled by BytesIO pillow
-    #img = io.BytesIO(img)
     img = Image.open(img) 
-    img.save('unblurred.png')   
-    #print("[SERVER] Stored frame")
+    #img.save('unblurred.png')   
     """
     Blur the image
     """
     # create detection object
     detector = Detector('face.pb', name="detection")
     # open image
-    image = cv2.imread('unblurred.png')
+    #image = cv2.imread('unblurred.png')
     # real face detection
+    image = np.array(img)
     faces = detector.detect_objects(image, threshold=0.4)
     #print("Faces detected")
     # apply blurring
     image = blurBoxes(image, faces)
     #print("Faces blurred")
     # Save the image
-    cv2.imwrite('./blurred.png', image)
+    #cv2.imwrite('./blurred.png', image)
     """
     Prepare the image to be sent back to the client
     """
-    img = Image.open('blurred.png')
+    #img = Image.open('blurred.png')
     #Convert Pillow Image to bytes and then to base64
     buffered = BytesIO()
-    img.save(buffered, format="PNG")
+    #img.save(buffered, format="PNG")
     img_byte = buffered.getvalue() # bytes
     img_base64 = base64.b64encode(img_byte) #Base64-encoded bytes * not str
 
@@ -57,7 +52,8 @@ def handle(req):
         "text":"serveRR",
         "img":img_str
         }
-    #return jsonify(response)
+    total_end_time = time.time()
+    print("Total time: " + str(total_end_time - total_start_time))
     return response
 
 class Detector:
@@ -71,7 +67,7 @@ class Detector:
             with tf.io.gfile.GFile(model_path, 'rb') as f:
                 self.graph_def.ParseFromString(f.read())
                 tf.import_graph_def(self.graph_def, name='')
-        #print(f"{self.model_name} model is created..")
+        print(f"{self.model_name} model is created..")
 
     def detect_objects(self, img, threshold=0.3):
         """Runs the model and returns the object inside it
@@ -84,8 +80,8 @@ class Detector:
         Ex: {'id': 16, 'score': 0.11703299731016159, 'x1': 42, 'y1': 6, 'x2': 55, 'y2': 27}
         """
 
-        #print(
-        #   "{} : Object detection has started..".format(self.model_name))
+        print(
+           "{} : Object detection has started..".format(self.model_name))
 
         start_time = time.time()
         objects = []
@@ -123,8 +119,8 @@ class Detector:
 
             #print(f"{self.model_name} : {len(objects)} objects have been found ")
         end_time = time.time()
-        #print("{} : Elapsed time: {}".format(
-        #    self.model_name, str(end_time - start_time)))
+        print("{} : Elapsed ML time: {}".format(
+            self.model_name, str(end_time - start_time)))
 
         return objects
 
