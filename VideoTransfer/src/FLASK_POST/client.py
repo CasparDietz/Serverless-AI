@@ -9,20 +9,13 @@ Import an image as a Pillow Image
 ⇒ You can safely POST with json
 """
 
-from fileinput import filename
-from pydoc import plain
 import re
-from traceback import print_tb
-from flask import request
 import requests
 from PIL import Image
-import json
 import base64
 from io import BytesIO
 import cv2
 import os
-import time
-import matplotlib.pyplot as plt
 import sys
 
 framedrop = int(sys.argv[1]) # Every "framedrop" frames, drop a frame
