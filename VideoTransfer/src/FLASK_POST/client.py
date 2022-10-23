@@ -19,7 +19,7 @@ import cv2
 import os
 import sys
 
-waitingTime = int(sys.argv[1]) 
+waitingTime = float(sys.argv[1]) 
 
 """
 Video is taken as input and the frames are extracted
