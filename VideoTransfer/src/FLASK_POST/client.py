@@ -19,34 +19,33 @@ import cv2
 import os
 import sys
 
-framedrop = int(sys.argv[1]) # Every "framedrop" frames, drop a frame
+waitingTime = int(sys.argv[1]) 
 
 """
 Video is taken as input and the frames are extracted
 """
-def video_to_frames(video, path_output_dir, framedrop):
+def video_to_frames(video, path_output_dir):
     print("[CLIENT] Began cutting the video into frames")
     # extract frames from a video and save to directory as 'x.png' where 
     # x is the frame index
     vidcap = cv2.VideoCapture(video)
-    count = 0 # Frame counter for all possible frames
-    frameNumber = 0 # This is a second counter to count only the frames that are not dropped
+    count = 0
     while vidcap.isOpened():
         success, image = vidcap.read()
         if success:
-            if count % framedrop == 0:
-                cv2.imwrite(os.path.join(path_output_dir, '%d.png') % count, image)
-                frameNumber += 1
+            #img_rotate_180 = cv2.rotate(image, cv2.ROTATE_180)
+            #cv2.imwrite(os.path.join(path_output_dir, '%d.png') % count, img_rotate_180)
+            cv2.imwrite(os.path.join(path_output_dir, '%d.png') % count, image)
             count += 1
         else:
             break
     cv2.destroyAllWindows()
     vidcap.release()
-    #print("[CLIENT] Finished cutting the video into frames")
-    return frameNumber
+    print("[CLIENT] Finished cutting the video into frames")
+    return count
 
-count = video_to_frames('./VideoInput/test.mp4', './Frames', framedrop) # count is the number of frames
-print("[CLIENT] Read " + str(count) + " frames")      
+count = video_to_frames('./VideoInput/test.mp4', './Frames') # count is the number of frames
+print("[CLIENT] Read " + str(count) + " frames") 
 """
 Send the frames to the server
 """ 
@@ -56,7 +55,6 @@ ElapsedMLTimeList = []
 TotalTimeList = []
 print("[CLIENT] Began sending frames to the server")
 for frame in range(count):
-    frame = frame * framedrop
     # Read frame
     img = Image.open('./Frames/' + str(frame) + '.png')
     #Convert Pillow Image to bytes and then to base64
@@ -73,10 +71,10 @@ for frame in range(count):
         "text":"client",
         "img":img_str
         }
-    
+    time.sleep(waitingTime) #Allows us to adjust the request rate
+    print("[CLIENT] Waiting " + str(waitingTime) + " seconds before sending the next frame")
     roundTripTimeStart  = time.time()
     r = requests.post("http://127.0.0.1:8080/function/slblur", data = img_str) 
-    #print(r.text)
     roundTripTimeEnd  = time.time()
     RoundTripTime.append(roundTripTimeEnd - roundTripTimeStart)
     # Extract info from the response
@@ -86,13 +84,11 @@ for frame in range(count):
         if  "Elapsed ML time:" in line:
             elapsedMLTime = re.search("Elapsed ML time: (.*)", line).group(1)
             ElapsedMLTimeList.append(elapsedMLTime)
-            #print("[CLIENT] Elapsed ML time for frame " + str(frame) + ": " + elapsedMLTime)
+            print("[CLIENT] Elapsed ML time for frame " + str(frame) + ": " + elapsedMLTime)
         if "Total time:" in line:
             totalTime = re.search("Total time: (.*)", line).group(1)
             TotalTimeList.append(totalTime)
-            #print("[CLIENT] Total time for frame " + str(frame) + ": " + totalTime)
-    
-    
+            print("[CLIENT] Total time for frame " + str(frame) + ": " + totalTime)
     
     #img = base64.b64decode(img_str) 
     #img = BytesIO(img) 
