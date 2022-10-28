@@ -1,60 +1,10 @@
-#from flask import  jsonify, request
-#import io
 from PIL import Image
-#import json
 import base64
-#from flask import Flask, jsonify, request
 from io import BytesIO
-#import os
-#import argparse
 import cv2
 import numpy as np
 import tensorflow as tf
 import time
-
-def handle(req):
-    print("NEW###ANOTHER########################################CASPR")
-    total_start_time = time.time()
-    img = base64.b64decode(req) 
-    img = BytesIO(img) # _io.Converted to be handled by BytesIO pillow
-    img = Image.open(img) 
-    #img.save('unblurred.png')   
-    """
-    Blur the image
-    """
-    # create detection object
-    detector = Detector('face.pb', name="detection")
-    # open image
-    #image = cv2.imread('unblurred.png')
-    # real face detection
-    image = np.array(img)
-    faces = detector.detect_objects(image, threshold=0.4)
-    #print("Faces detected")
-    # apply blurring
-    image = blurBoxes(image, faces)
-    #print("Faces blurred")
-    # Save the image
-    #cv2.imwrite('./blurred.png', image)
-    """
-    Prepare the image to be sent back to the client
-    """
-    #img = Image.open('blurred.png')
-    #Convert Pillow Image to bytes and then to base64
-    buffered = BytesIO()
-    #img.save(buffered, format="PNG")
-    img_byte = buffered.getvalue() # bytes
-    img_base64 = base64.b64encode(img_byte) #Base64-encoded bytes * not str
-
-    #It's still bytes so json.Convert to str to dumps(Because the json element does not support bytes type)
-    img_str = img_base64.decode('utf-8') # str
-
-    response = {
-        "text":"serveRR",
-        "img":img_str
-        }
-    total_end_time = time.time()
-    print("Total time: " + str(total_end_time - total_start_time))
-    return response
 
 class Detector:
     def __init__(self, model_path, name=""):
@@ -149,3 +99,45 @@ def blurBoxes(image, boxes):
         image[y1:y2, x1:x2] = blur
 
     return image
+
+ # create detection object
+detector = Detector('face.pb', name="detection")
+
+def handle(req):
+    total_start_time = time.time()
+    img = base64.b64decode(req) 
+    img = BytesIO(img) # _io.Converted to be handled by BytesIO pillow
+    img = Image.open(img) 
+    """
+    Blur the image
+    """
+    #create detection object
+    #detector = Detector('face.pb', name="detection")
+    # real face detection
+    image = np.array(img)
+    faces = detector.detect_objects(image, threshold=0.4)
+    # apply blurring
+    image = blurBoxes(image, faces)
+    #print("Faces blurred")
+    # Save the image
+    #cv2.imwrite('./blurred.png', image)
+    """
+    Prepare the image to be sent back to the client
+    """
+    #img = Image.open('blurred.png')
+    #Convert Pillow Image to bytes and then to base64
+    buffered = BytesIO()
+    #img.save(buffered, format="PNG")
+    img_byte = buffered.getvalue() # bytes
+    img_base64 = base64.b64encode(img_byte) #Base64-encoded bytes * not str
+
+    #It's still bytes so json.Convert to str to dumps(Because the json element does not support bytes type)
+    img_str = img_base64.decode('utf-8') # str
+
+    response = {
+        "text":"serveRR",
+        "img":img_str
+        }
+    total_end_time = time.time()
+    print("Total time: " + str(total_end_time - total_start_time))
+    return response
