@@ -1,10 +1,18 @@
+#from flask import  jsonify, request
+#import io
 from PIL import Image
+#import json
 import base64
+#from flask import Flask, jsonify, request
 from io import BytesIO
+#import os
+#import argparse
 import cv2
 import numpy as np
 import tensorflow as tf
 import time
+
+
 
 class Detector:
     def __init__(self, model_path, name=""):
@@ -100,22 +108,26 @@ def blurBoxes(image, boxes):
 
     return image
 
- # create detection object
+global detector
 detector = Detector('face.pb', name="detection")
-
+print("OUTSIDE EVERYTHING")
 def handle(req):
     total_start_time = time.time()
     img = base64.b64decode(req) 
     img = BytesIO(img) # _io.Converted to be handled by BytesIO pillow
     img = Image.open(img) 
+    #img.save('unblurred.png')   
     """
     Blur the image
     """
-    #create detection object
+    # create detection object
     #detector = Detector('face.pb', name="detection")
+    # open image
+    #image = cv2.imread('unblurred.png')
     # real face detection
     image = np.array(img)
     faces = detector.detect_objects(image, threshold=0.4)
+    #print("Faces detected")
     # apply blurring
     image = blurBoxes(image, faces)
     #print("Faces blurred")

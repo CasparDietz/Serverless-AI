@@ -75,6 +75,7 @@ for frame in range(count):
     print("[CLIENT] Waiting " + str(waitingTime) + " seconds before sending the next frame")
     roundTripTimeStart  = time.time()
     r = requests.post("http://127.0.0.1:8080/function/slblur", data = img_str) 
+    print(r.text)
     roundTripTimeEnd  = time.time()
     RoundTripTime.append(roundTripTimeEnd - roundTripTimeStart)
     # Extract info from the response
