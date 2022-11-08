@@ -3,10 +3,6 @@ Function as a Service (FaaS) is a category of cloud computing services which is 
 Moreover, FaaS is also well received to support AI applications in computing continua because they can benefit both from the reduced latency and increased privacy and can support partition switching of deep neural networks distributed on multiple components with the aim of optimizing the application execution time and resource usage. 
 In this context, some works focus on application function placement on edge-cloud and public-private cloud by leveraging FaaS to make a cost-efficient execution and placement of AI applications. 
 
-This research project aims to benchmark and evaluate the performance of AI applications running in FaaS computing continuum environments.
-
-**Table of Contents**
-
 # Research Goal
 
 - Benchmark and evaluate the performance of AI applications running in FaaS
