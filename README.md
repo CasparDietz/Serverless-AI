@@ -1,7 +1,5 @@
 # Performance Modeling and Evaluation of Serverless AI Applications
 
-**Table of Contents**
-
 # Introduction
 
 Function as a Service (FaaS) is a category of cloud computing services which is becoming very popular. It provides a serverless paradigm to execute modular pieces of code (denoted as functions) on a cloud platform. Functions (that can be scaled dynamically and independently by the cloud provider) are executed transparently in Docker containers, so that users can focus only on the application code, without having to manage the infrastructure. FaaS proves to be cost-effective, especially for dynamic workloads, since users pay only for the resources they use, not for the provisioned maximum capacity required by their system. Moreover, FaaS is also well received to support AI applications in computing continua because they can benefit both from the reduced latency and increased privacy and can support partition switching of deep neural networks distributed on multiple components with the aim of optimizing the application execution time and resource usage.
@@ -21,7 +19,7 @@ The following figure provides an overview over the entire setup. Our basic compo
 2. **Client:** this is the python code from the [client.py](https://github.com/CasparDietz/Serverless-AI/blob/main/VideoTransfer/src/client/client.py). It takes an .mp4 file as input, cuts it into frames, encodes them and sends them off to the handler as a POST. It then receives for each frame, the blurred frame back. The blurring is happening in the OpenFaas function. When running the client.py file you can provide as argument the think time of the client, e.g. running `python client.py 5` will introduce a think time of 5s. The code is executed by the JMeter slaves. Each slave will create several users/threads that run a copy of the client.py file.
 3. **JMeter Coordinator:** This is the machine that coordinates the JMeter slaves. It is here where you can specify the parameters of the distributed load test (ramp up time and number of users). It is also the component that collects and receives all the results of the distributed load test performed by the JMeter slaves on the target (the OpenFaas function).
 
-![Untitled](Performance%20Modeling%20and%20Evaluation%20of%20Serverless%20%205d11d34f337b49298e0b4a27069bc7dd/Untitled.png)
+![Untitled](images/Untitled.png)
 
 # Docker, Kubernetes and OpenFaas
 
@@ -192,7 +190,7 @@ In this section we will explain the setup of the distributed JMeter load test we
 
 ## Overview
 
-![policloud.jpeg](Performance%20Modeling%20and%20Evaluation%20of%20Serverless%20%205d11d34f337b49298e0b4a27069bc7dd/policloud.jpeg)
+![policloud.jpeg](images/policloud.jpeg)
 
 ## Prerequisites
 
@@ -268,19 +266,19 @@ Now that the slave and master machines have been configured correctly, the next 
 
 The initial request rate is configured in the Thread Group (which is added to the Test plan) by specifying an appropriate ramp-up time for the given number of threads. An example for 9 threads is given bellow.
 
-![Screenshot 2022-10-27 at 22.26.15.png](Performance%20Modeling%20and%20Evaluation%20of%20Serverless%20%205d11d34f337b49298e0b4a27069bc7dd/Screenshot_2022-10-27_at_22.26.15.png)
+![Screenshot 2022-10-27 at 22.26.15.png](images/Screenshot_2022-10-27_at_22.26.15.png)
 
 The OS Process Sampler is added to the Thread Group and configured so that it contains the Python path which represents the command, and the path to the working directory where the Python script that needs to be executed is contained. Command parameters, represent the Python script and the think time of the users. In the below example, the .jmx file is configured to have a think time of 0s. 
 
-![Screenshot 2022-10-27 at 22.41.36.png](Performance%20Modeling%20and%20Evaluation%20of%20Serverless%20%205d11d34f337b49298e0b4a27069bc7dd/Screenshot_2022-10-27_at_22.41.36.png)
+![Screenshot 2022-10-27 at 22.41.36.png](images/Screenshot_2022-10-27_at_22.41.36.png)
 
 A “View Result Tree” listener is added to the Test Plan to collect results to the given file. 
 
-![Screenshot 2022-10-27 at 22.45.44.png](Performance%20Modeling%20and%20Evaluation%20of%20Serverless%20%205d11d34f337b49298e0b4a27069bc7dd/Screenshot_2022-10-27_at_22.45.44.png)
+![Screenshot 2022-10-27 at 22.45.44.png](images/Screenshot_2022-10-27_at_22.45.44.png)
 
 Make sure to also configure the “Save as XML” and “Save Response Data (XML)”. This allows us to save the handler’s responses.
 
-![Adding the configuration of the upper mentioned fields, it enables the saving of responses to an XML file.](Performance%20Modeling%20and%20Evaluation%20of%20Serverless%20%205d11d34f337b49298e0b4a27069bc7dd/Screenshot_2022-10-27_at_22.47.57.png)
+![Adding the configuration of the upper mentioned fields, it enables the saving of responses to an XML file.](images/Screenshot_2022-10-27_at_22.47.57.png)
 
 Adding the configuration of the upper mentioned fields, it enables the saving of responses to an XML file.
 
@@ -322,7 +320,7 @@ Below you can see:
 - **`Total Time`:** this is the total runtime of the python handler in the OpenFaas function. This is measured in the handler.
 - **`ML Time`:** this is the time it took to run the face blur in the handler. This is measured in the handler.
 
-![timeline.jpeg](Performance%20Modeling%20and%20Evaluation%20of%20Serverless%20%205d11d34f337b49298e0b4a27069bc7dd/timeline.jpeg)
+![timeline.jpeg](images/timeline.jpeg)
 
 ## ****Round Trip Time, Total Time in Handler & ML Time in Handler****
 
@@ -330,39 +328,39 @@ We plotted the data we received from the handler using the [python notebook](htt
 
 As you can see from the plots below, we always plotted three different sleep times (or “think time”) for each number of threads: 0s, 1s and 5s (from left to right). We also always reported the mean and median round trip time, as well as the success rate for each number of threads and think times (or sleep). Both is always reported under the graphs.
 
-![Screenshot 2022-10-28 at 17.44.14.png](Performance%20Modeling%20and%20Evaluation%20of%20Serverless%20%205d11d34f337b49298e0b4a27069bc7dd/Screenshot_2022-10-28_at_17.44.14.png)
+![Screenshot 2022-10-28 at 17.44.14.png](images/Screenshot_2022-10-28_at_17.44.14.png)
 
-![Screenshot 2022-10-28 at 17.44.17.png](Performance%20Modeling%20and%20Evaluation%20of%20Serverless%20%205d11d34f337b49298e0b4a27069bc7dd/Screenshot_2022-10-28_at_17.44.17.png)
+![Screenshot 2022-10-28 at 17.44.17.png](images/Screenshot_2022-10-28_at_17.44.17.png)
 
-![Screenshot 2022-10-28 at 17.44.19.png](Performance%20Modeling%20and%20Evaluation%20of%20Serverless%20%205d11d34f337b49298e0b4a27069bc7dd/Screenshot_2022-10-28_at_17.44.19.png)
+![Screenshot 2022-10-28 at 17.44.19.png](images/Screenshot_2022-10-28_at_17.44.19.png)
 
-![Screenshot 2022-10-28 at 17.44.20.png](Performance%20Modeling%20and%20Evaluation%20of%20Serverless%20%205d11d34f337b49298e0b4a27069bc7dd/Screenshot_2022-10-28_at_17.44.20.png)
+![Screenshot 2022-10-28 at 17.44.20.png](images/Screenshot_2022-10-28_at_17.44.20.png)
 
-![Screenshot 2022-10-28 at 17.44.22.png](Performance%20Modeling%20and%20Evaluation%20of%20Serverless%20%205d11d34f337b49298e0b4a27069bc7dd/Screenshot_2022-10-28_at_17.44.22.png)
+![Screenshot 2022-10-28 at 17.44.22.png](images/Screenshot_2022-10-28_at_17.44.22.png)
 
-![Screenshot 2022-10-28 at 17.44.24.png](Performance%20Modeling%20and%20Evaluation%20of%20Serverless%20%205d11d34f337b49298e0b4a27069bc7dd/Screenshot_2022-10-28_at_17.44.24.png)
+![Screenshot 2022-10-28 at 17.44.24.png](images/Screenshot_2022-10-28_at_17.44.24.png)
 
-![Screenshot 2022-10-28 at 17.44.26.png](Performance%20Modeling%20and%20Evaluation%20of%20Serverless%20%205d11d34f337b49298e0b4a27069bc7dd/Screenshot_2022-10-28_at_17.44.26.png)
+![Screenshot 2022-10-28 at 17.44.26.png](images/Screenshot_2022-10-28_at_17.44.26.png)
 
-![Screenshot 2022-10-28 at 17.44.28.png](Performance%20Modeling%20and%20Evaluation%20of%20Serverless%20%205d11d34f337b49298e0b4a27069bc7dd/Screenshot_2022-10-28_at_17.44.28.png)
+![Screenshot 2022-10-28 at 17.44.28.png](images/Screenshot_2022-10-28_at_17.44.28.png)
 
-![Screenshot 2022-10-28 at 17.44.38.png](Performance%20Modeling%20and%20Evaluation%20of%20Serverless%20%205d11d34f337b49298e0b4a27069bc7dd/Screenshot_2022-10-28_at_17.44.38.png)
+![Screenshot 2022-10-28 at 17.44.38.png](images/Screenshot_2022-10-28_at_17.44.38.png)
 
 ## ****Success Rate over Number of Threads/Sleep Time****
 
 In the following graph, we plotted the request success rate over the number of threads. The different colours indicate the different think times, again we plotted the data for 0s, 1s and 5s.
 
-![Screenshot 2022-10-28 at 17.44.57.png](Performance%20Modeling%20and%20Evaluation%20of%20Serverless%20%205d11d34f337b49298e0b4a27069bc7dd/Screenshot_2022-10-28_at_17.44.57.png)
+![Screenshot 2022-10-28 at 17.44.57.png](images/Screenshot_2022-10-28_at_17.44.57.png)
 
 ## ****Mean Response Time over Number of Threads/Sleep Time****
 
 In this last plot, we plotted the mean response time over the number of threads. Again, the different colours indicate the different think times.
 
-![Screenshot 2022-10-28 at 17.45.03.png](Performance%20Modeling%20and%20Evaluation%20of%20Serverless%20%205d11d34f337b49298e0b4a27069bc7dd/Screenshot_2022-10-28_at_17.45.03.png)
+![Screenshot 2022-10-28 at 17.45.03.png](images/Screenshot_2022-10-28_at_17.45.03.png)
 
 # Presentation PDF
 
-[Serverless AI Update Presentation.pdf](Performance%20Modeling%20and%20Evaluation%20of%20Serverless%20%205d11d34f337b49298e0b4a27069bc7dd/Serverless_AI_Update_Presentation.pdf)
+[Serverless AI Update Presentation.pdf](images/Serverless_AI_Update_Presentation.pdf)
 
 # Git Repositories
 
